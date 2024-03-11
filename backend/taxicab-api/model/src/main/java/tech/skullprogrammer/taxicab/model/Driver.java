@@ -1,4 +1,4 @@
-package tech.skullprogrammer.model;
+package tech.skullprogrammer.taxicab.model;
 
 import org.bson.types.ObjectId;
 

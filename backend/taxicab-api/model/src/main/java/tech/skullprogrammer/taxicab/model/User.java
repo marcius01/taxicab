@@ -1,8 +1,14 @@
-package tech.skullprogrammer.model;
+package tech.skullprogrammer.taxicab.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import org.bson.types.ObjectId;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class User {
 
     private ObjectId id;

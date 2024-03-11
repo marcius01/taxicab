@@ -1,4 +1,4 @@
-package tech.skullprogrammer.model.enums;
+package tech.skullprogrammer.taxicab.model.enums;
 
 public enum ERole {
 
