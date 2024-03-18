@@ -1,4 +1,4 @@
-package tech.skullprogrammer.taxicab.model;
+package tech.skullprogrammer.taxicab.model.customer;
 
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -8,11 +8,9 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Driver {
+public class CompletedRide {
 
-    private ObjectId id;
-    private ObjectId userId;
-
+    private ObjectId _id;
 
 
 }

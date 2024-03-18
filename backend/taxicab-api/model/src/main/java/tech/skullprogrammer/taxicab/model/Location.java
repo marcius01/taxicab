@@ -1,18 +1,15 @@
 package tech.skullprogrammer.taxicab.model;
 
 import lombok.*;
-import org.bson.types.ObjectId;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Driver {
+public class Location {
 
-    private ObjectId id;
-    private ObjectId userId;
-
-
-
+    private Double longitude;
+    private Double latitude;
+    private String locationName;
 }
