@@ -1,4 +1,4 @@
-db.getSiblingDB('talete').createUser(
+db.getSiblingDB('taxicab').createUser(
         {
             user: "taxicabUser",
             pwd: "PosLLy22pO7T4i",
