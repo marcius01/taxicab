@@ -10,7 +10,7 @@ import tech.skullprogrammer.taxicab.model.User;
 @QuarkusTest
 public class RepositoryUserTest {
     @Inject
-    private RepositoryUser repositoryUser;
+    private UserRepository repositoryUser;
 
     @Test
     public void testUserRepo () {
