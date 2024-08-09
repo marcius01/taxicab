@@ -2,9 +2,7 @@ package tech.skullprogrammer.taxicab.auth.rest;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.skullprogrammer.taxicab.auth.model.LoginDTO;
@@ -24,6 +22,14 @@ public class AuthResource {
         return Response.ok()
                 .header("X-Auth-Token", token)
                 .build();
+    }
+
+    @Path("/send-otp/{email}")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sendOTP(@PathParam(value = "email") String email, @QueryParam(value = "lang") @DefaultValue("en") String lang) {
+        authService.sendOtpEmail(lang, email);
+        return Response.ok().build();
     }
 
 }
