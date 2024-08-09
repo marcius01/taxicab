@@ -18,6 +18,10 @@ public class UserRepository implements PanacheMongoRepository<User> {
         return find("email = ?1 and  password = ?2", email, password).singleResultOptional();
     }
 
+    public Optional<User> findByEmailAndOTP(String email, String otp) {
+        return find("email = ?1 and  resetPasswordOtp = ?2", email, otp).singleResultOptional();
+    }
+
     public Optional<User> findByEmail(String email) {
         return find("email = ?1", email).singleResultOptional();
     }

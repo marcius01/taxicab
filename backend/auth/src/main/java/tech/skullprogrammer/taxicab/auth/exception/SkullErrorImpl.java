@@ -9,6 +9,8 @@ import tech.skullprogrammer.core.exception.ISkullError;
 public enum SkullErrorImpl implements ISkullError.App
 {
     BAD_REQUEST(HttpResponseStatus.BAD_REQUEST.code()),
+    WRONG_OTP(HttpResponseStatus.BAD_REQUEST.code()),
+    EXPIRED_OTP(HttpResponseStatus.BAD_REQUEST.code()),
     WRONG_CREDENTIALS(HttpResponseStatus.UNAUTHORIZED.code());
 
 

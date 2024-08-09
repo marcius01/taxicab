@@ -6,10 +6,11 @@ import lombok.Data;
 
 @Data
 @RegisterForReflection
-public class LoginDTO {
-
+public class ResetPasswordDTO {
     @NotBlank
     private String email;
     @NotBlank
     private String password;
+    @NotBlank
+    private String otp;
 }

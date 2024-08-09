@@ -6,6 +6,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.skullprogrammer.taxicab.auth.model.LoginDTO;
+import tech.skullprogrammer.taxicab.auth.model.ResetPasswordDTO;
 import tech.skullprogrammer.taxicab.auth.service.AuthService;
 
 @Path("/auth")
@@ -18,11 +19,21 @@ public class AuthResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response auth(@Valid LoginDTO loginDTO) {
-        String token = authService.generateToken(loginDTO);
+        String token = authService.loginToken(loginDTO);
         return Response.ok()
                 .header("X-Auth-Token", token)
                 .build();
     }
+
+    @Path("/reset")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response reset(@Valid ResetPasswordDTO resetPasswordDTO) {
+        authService.resetPassword(resetPasswordDTO);
+        return Response.ok().build();
+    }
+
+
 
     @Path("/send-otp/{email}")
     @POST

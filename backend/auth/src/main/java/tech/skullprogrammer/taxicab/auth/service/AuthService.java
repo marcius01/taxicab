@@ -10,6 +10,7 @@ import tech.skullprogrammer.taxicab.auth.model.LoginDTO;
 import tech.skullprogrammer.taxicab.auth.exception.SkullErrorImpl;
 import tech.skullprogrammer.core.exception.SkullResourceException;
 import tech.skullprogrammer.core.model.CustomConfig;
+import tech.skullprogrammer.taxicab.auth.model.ResetPasswordDTO;
 import tech.skullprogrammer.taxicab.model.User;
 import tech.skullprogrammer.taxicab.repository.UserRepository;
 
@@ -29,11 +30,23 @@ public class AuthService {
     @Inject
     private MailService mailService;
 
-    public String generateToken(LoginDTO loginDTO) {
+    public String loginToken(LoginDTO loginDTO) {
         Optional<User> user = userRepo.findByEmailAndPassword(loginDTO.getEmail(), DigestUtils.sha256Hex(loginDTO.getPassword()));
         if (user.isEmpty()) throw SkullResourceException.builder().error(SkullErrorImpl.WRONG_CREDENTIALS).build();
         return generateJWT(user.get());
     }
+
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        Optional<User> userOPT = userRepo.findByEmailAndOTP(resetPasswordDTO.getEmail(), DigestUtils.sha256Hex(resetPasswordDTO.getOtp()));
+        log.debug(userOPT.toString());
+        if (userOPT.isEmpty()) throw SkullResourceException.builder().error(SkullErrorImpl.WRONG_OTP).build();
+        if (LocalDateTime.now().isAfter(userOPT.get().getOtpExpiration())) throw SkullResourceException.builder().error(SkullErrorImpl.EXPIRED_OTP).build();
+        User user = userOPT.get();
+        user.setPassword(DigestUtils.sha256Hex(resetPasswordDTO.getPassword()));
+        user.setResetPasswordOtp(null);
+        user.setOtpExpiration(null);
+        userRepo.update(user);
+      }
 
     public void sendOtpEmail(String lang, String email) {
         userRepo.findByEmail(email)
