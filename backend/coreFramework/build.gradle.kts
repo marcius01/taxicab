@@ -26,6 +26,8 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
 
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
+    implementation("io.quarkus:quarkus-mailer")
+    implementation("io.quarkus:quarkus-qute")
 //    implementation("io.quarkus:quarkus-hibernate-validator")
 //    implementation("io.quarkus:quarkus-rest-client-reactive-jackson")
 
@@ -34,4 +36,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.compileJava {
+    options.encoding = "UTF-8"
+    options.compilerArgs.add("-parameters")
 }
