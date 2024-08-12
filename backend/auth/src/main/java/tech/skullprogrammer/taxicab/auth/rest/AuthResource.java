@@ -1,5 +1,6 @@
 package tech.skullprogrammer.taxicab.auth.rest;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -18,6 +19,7 @@ public class AuthResource {
     @Path("/login")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response auth(@Valid LoginDTO loginDTO) {
         String token = authService.loginToken(loginDTO);
         return Response.ok()
@@ -28,6 +30,7 @@ public class AuthResource {
     @Path("/reset")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response reset(@Valid ResetPasswordDTO resetPasswordDTO) {
         authService.resetPassword(resetPasswordDTO);
         return Response.ok().build();
@@ -38,6 +41,7 @@ public class AuthResource {
     @Path("/send-otp/{email}")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response sendOTP(@PathParam(value = "email") String email, @QueryParam(value = "lang") @DefaultValue("en") String lang) {
         authService.sendOtpEmail(lang, email);
         return Response.ok().build();
