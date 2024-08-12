@@ -20,4 +20,4 @@ include("model")
 //findProject(":taxicab-api:api")?.name = "api"
 include("auth")
 //findProject(":taxicab-api:auth")?.name = "auth"
-
+include("ms-profile")
