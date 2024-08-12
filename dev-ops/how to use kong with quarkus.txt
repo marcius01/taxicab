@@ -1,0 +1,39 @@
+how to use kong with quarkus microservices
+
+--Microservice--
+
+- keep the docker folder (and the files inside it) in src/main of each microservice
+- build and create the docker image for each microservice you want to use. For the various steps, you can consult the comments in the docker file associated with the type of app we want to create (jvm or native), in the src/main folder
+	- example auth-ms	
+		- ./gradlew auth:clean auth:build -Dquarkus.container-image.build=true -Dquarkus.profile=dev
+		- place in the auth microservice folder
+		- docker build -f src/main/docker/Dockerfile.jvm -t quarkus/auth-jvm .
+		- from this point on, the image will be present among those in docker
+
+
+-- Kong --
+- we will use the version with doker compose, otherwise to use the docker file, you must follow the guide on the kong site. Also, since it is used in development mode in our case, the security password will not be set.
+- create an external network on docker
+	- docker network create kong-net
+- download the docker compose from kong's git (https://github.com/Kong/docker-kong/tree/master/compose)
+- configure the network of the file to use the one created earlier, setting the network property with "external" to true (false uses its own internal network that has nothing to do with the one created earlier, even if they have the same name)
+	- external: true
+- start kong in DB mode
+	- $COMPOSE_PROFILES=database KONG_DATABASE=postgres docker compose up -d
+
+	
+-- Configuration -- 
+- start the microservices docker container by specifying the network to be used.
+	- docker run --network=kong-net --name auth-service -p 9001:9001 quarkus/auth-jvm 
+- create the service on kong. Below is an example command.
+	curl -i -s -X POST http://localhost:8001/services \
+	--data name=auth-service \
+	--data url='http://auth-service:9001/'
+- create the route on kong. Below is an example command.
+	curl -i -X POST http://localhost:8001/services/auth-service/routes \
+	--data 'paths[]=/auth' \
+	--data name=auth-route
+
+
+Calls can now be made to kong, which will redirect them to the indicated service (depending on the indicated route).
+In our example, by contacting http://localhost:8001/auth (thanks to the indicated route) the request will be redirected to the docker auth-service on port 9001
