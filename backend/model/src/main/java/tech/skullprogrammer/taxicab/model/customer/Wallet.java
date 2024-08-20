@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 public class Wallet {
 
-    public ObjectId customerId;
     public String description;
     public List<AppliedPromo> appliedPromos;
     public List<CreditCard> creditCards;

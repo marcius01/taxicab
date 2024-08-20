@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(path=":coreFramework"))
 //    implementation("io.quarkus:quarkus-mongodb-panache")
 //    annotationProcessor("io.quarkus:quarkus-panache-common")
 }
