@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.microprofile.config.inject.ConfigProperties;
 
-@ConfigMapping(prefix = "tech.skullprogrammer.taxicab")
+@ConfigMapping(prefix = "tech.skullprogrammer")
 public interface CustomConfig {
     Jwt jwt();
     ResetPassword resetPassword();

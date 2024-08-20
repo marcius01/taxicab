@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SkullErrorDefaultImpl implements ISkullError.App
 {
-    VALIDATION_ERROR(HttpResponseStatus.UNPROCESSABLE_ENTITY.code());
+    VALIDATION_ERROR(HttpResponseStatus.UNPROCESSABLE_ENTITY.code()),
+    BAD_REQUEST(HttpResponseStatus.BAD_REQUEST.code());
 
 
     private final int status;

@@ -1,19 +1,15 @@
 package tech.skullprogrammer.core.mapping;
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.ext.Provider;
-import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.skullprogrammer.core.exception.GenericErrorPayload;
-import tech.skullprogrammer.core.exception.SkullErrorDefaultImpl;
 import tech.skullprogrammer.core.exception.SkullResourceException;
 import tech.skullprogrammer.core.model.ErrorResponseDTO;
 

@@ -28,7 +28,9 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-mailer")
     implementation("io.quarkus:quarkus-qute")
-//    implementation("io.quarkus:quarkus-hibernate-validator")
+    implementation("io.quarkus:quarkus-hibernate-validator")
+    implementation("io.quarkus:quarkus-mongodb-panache")
+//    annotationProcessor("io.quarkus:quarkus-panache-common")
 //    implementation("io.quarkus:quarkus-rest-client-reactive-jackson")
 
     testImplementation("io.quarkus:quarkus-junit5")
