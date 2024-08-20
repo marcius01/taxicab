@@ -5,9 +5,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import tech.skullprogrammer.core.Constants;
 import tech.skullprogrammer.core.service.MailService;
 import tech.skullprogrammer.taxicab.auth.model.LoginDTO;
-import tech.skullprogrammer.taxicab.auth.exception.SkullErrorImpl;
+import tech.skullprogrammer.taxicab.exception.SkullErrorImpl;
 import tech.skullprogrammer.core.exception.SkullResourceException;
 import tech.skullprogrammer.core.model.CustomConfig;
 import tech.skullprogrammer.taxicab.auth.model.ResetPasswordDTO;
@@ -24,11 +25,11 @@ import java.util.UUID;
 public class AuthService {
 
     @Inject
-    private UserRepository userRepo;
+    UserRepository userRepo;
     @Inject
-    private CustomConfig config;
+    CustomConfig config;
     @Inject
-    private MailService mailService;
+    MailService mailService;
 
     public String loginToken(LoginDTO loginDTO) {
         Optional<User> user = userRepo.findByEmailAndPassword(loginDTO.getEmail(), DigestUtils.sha256Hex(loginDTO.getPassword()));
@@ -56,7 +57,7 @@ public class AuthService {
                             .plusMinutes(config.resetPassword().otpDuration());
                     user.setResetPasswordOtp(DigestUtils.sha256Hex(otp));
                     user.setOtpExpiration(otpExpiration);
-                    mailService.sendResetPasswordMail(user.getName(), lang, otp, user.getEmail());
+                    mailService.sendResetPasswordMail(user.getUsername(), lang, otp, user.getEmail());
                     userRepo.persistOrUpdate(user);
                 });
     }
@@ -64,6 +65,7 @@ public class AuthService {
         return Jwt.issuer(config.jwt().issuer())
                 .subject(user.getUsername())
                 .groups(user.getRoles())
+                .claim(Constants.CLAIM_USER_ID, user.getId())
                 .expiresIn(Duration.ofSeconds(config.jwt().expiration()))
                 .sign();
     }
