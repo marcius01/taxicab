@@ -56,4 +56,13 @@ public class ProfileResource {
         return profileService.createProfile(profile);
     }
 
+    @Path("/check")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({Roles.SYSTEM})
+    public Response checkProfile(Profile profile) {
+        profileService.checkProfile(profile);
+        return Response.ok().build();
+    }
+
 }

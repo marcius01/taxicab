@@ -1,5 +1,6 @@
 package tech.skullprogrammer.taxicab.msprofile.service;
 
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +41,12 @@ public class ProfileService {
     }
 
     public Profile createProfile(Profile profile) {
-        checkProfileForCreation(profile);
+        checkProfile(profile);
         profileRepo.persist(profile);
         return profile;
     }
 
-    private void checkProfileForCreation(Profile profile) {
+    public void checkProfile(@Nonnull Profile profile) {
         Map<String, String> errors = new HashMap<>();
         if (profile.getId() != null) errors.put("id", "id must be empty");
         if (ChronoUnit.YEARS.between(profile.getBirth(),LocalDate.now())< config.minYears()) errors.put("years", "younger than required age - " + config.minYears());
