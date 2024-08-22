@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.skullprogrammer.taxicab.auth.model.LoginDTO;
 import tech.skullprogrammer.taxicab.auth.model.ResetPasswordDTO;
+import tech.skullprogrammer.taxicab.auth.model.SignUpDTO;
 import tech.skullprogrammer.taxicab.auth.service.AuthService;
 
 @Path("/auth")
@@ -15,6 +16,15 @@ public class AuthResource {
 
     @Inject
     private AuthService authService;
+
+    @Path("/sign-up")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
+    public Response signup(@Valid SignUpDTO signUpDTO) {
+        authService.signUp(signUpDTO);
+        return Response.ok().build();
+    }
 
     @Path("/login")
     @POST
