@@ -53,13 +53,14 @@ public class AuthService {
         Optional<User> userOPT = userRepo.findByEmailAndOTP(resetPasswordDTO.getEmail(), hashValue(resetPasswordDTO.getOtp()));
         log.debug(userOPT.toString());
         if (userOPT.isEmpty()) throw SkullResourceException.builder().error(SkullErrorImpl.WRONG_OTP).build();
-        if (LocalDateTime.now().isAfter(userOPT.get().getOtpExpiration())) throw SkullResourceException.builder().error(SkullErrorImpl.EXPIRED_OTP).build();
+        if (LocalDateTime.now().isAfter(userOPT.get().getOtpExpiration()))
+            throw SkullResourceException.builder().error(SkullErrorImpl.EXPIRED_OTP).build();
         User user = userOPT.get();
         user.setPassword(hashValue(resetPasswordDTO.getPassword()));
         user.setResetPasswordOtp(null);
         user.setOtpExpiration(null);
         userRepo.update(user);
-      }
+    }
 
     public void sendOtpEmail(String lang, String email) {
         userRepo.findByEmail(email)
@@ -75,34 +76,34 @@ public class AuthService {
     }
 
     public void signUp(@Valid SignUpDTO signUpDTO) {
-        checkSignUpData(signUpDTO);
-        User.builder()
-                .roles(Set.of(Roles.USER, Roles.CUSTOMER))
-                .password(hashValue(signUpDTO.getPassword()))
-                .email(signUpDTO.getEmail())
-                .username(signUpDTO.getUsername())
-                .build();
-        Profile.builder().build();
-        //TODO call profile service to create profile
-    }
-
-    private void checkSignUpData(SignUpDTO signUpDTO) {
-        if (userRepo.findByEmail(signUpDTO.getEmail()).isPresent()) throw SkullResourceException.builder().error(SkullErrorImpl.EMAIL_ALREADY_IN_DB).build();
+        if (userRepo.findByEmail(signUpDTO.getEmail()).isPresent())
+            throw SkullResourceException.builder().error(SkullErrorImpl.EMAIL_ALREADY_IN_DB).build();
         Profile profile = createPartialProfile(signUpDTO);
         checkProfile(profile);
-        //TODO check if mail is already in db
+        User user = createUser(signUpDTO);
+        userRepo.persist(user);
+        profile.setUserId(user.getId());
+        try (Response response = profileClient.createProfile(profile)) {
+        } catch (RuntimeException e) {
+            userRepo.delete(user);
+        }
+    }
+
+    private User createUser(SignUpDTO signUpDTO) {
+        return User.builder()
+                .username(signUpDTO.getUsername())
+                .roles(Set.of(Roles.USER))
+                .email(signUpDTO.getEmail())
+                .password(hashValue(signUpDTO.getPassword()))
+                .build();
     }
 
     private void checkProfile(Profile profile) {
-        Response response = null;
-        try {
-            response = profileClient.checkProfile(profile);
+        try (Response response = profileClient.checkProfile(profile);) {
             log.debug("Response on profile check: {}", response.getStatusInfo());
         } catch (SkullResourceException ex) {
-            log.error("1");
             throw ex;
         } catch (Exception ex) {
-            log.error("2 {} ", response);
             throw SkullResourceException.builder().error(SkullErrorImpl.NO_VALID_PROFILE).build();
         }
     }
@@ -110,6 +111,7 @@ public class AuthService {
     private Profile createPartialProfile(SignUpDTO signUpDTO) {
         return Profile.builder()
                 .name(signUpDTO.getName())
+                .lastName(signUpDTO.getLastName())
                 .birth(signUpDTO.getBirth())
                 .wallet(new Wallet())
                 .build();
