@@ -12,6 +12,8 @@ public enum SkullErrorImpl implements ISkullError.App
     WRONG_OTP(HttpResponseStatus.BAD_REQUEST.code()),
     EXPIRED_OTP(HttpResponseStatus.BAD_REQUEST.code()),
     WRONG_CREDENTIALS(HttpResponseStatus.UNAUTHORIZED.code()),
+    //USER
+    EMAIL_ALREADY_IN_DB(HttpResponseStatus.BAD_REQUEST.code()),
     //PROFILE
     NO_PROFILE(HttpResponseStatus.BAD_REQUEST.code()),
     NO_VALID_PROFILE(HttpResponseStatus.BAD_REQUEST.code());
